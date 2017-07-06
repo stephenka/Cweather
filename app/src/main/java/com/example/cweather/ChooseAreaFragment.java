@@ -2,7 +2,9 @@ package com.example.cweather;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -31,6 +33,8 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import static com.example.cweather.WeatherActivity.mId;
 
 /**
  * Created by ka on 2017/7/1.
@@ -96,10 +100,17 @@ public class ChooseAreaFragment extends Fragment {
                         startActivity(intent);
                         getActivity().finish();
                     }else if (getActivity()instanceof WeatherActivity){
+                       // SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
+                       // SharedPreferences.Editor editor = pref.edit();
+
+                        mId=weatherId;
+
+
+
                         WeatherActivity activity=(WeatherActivity)getActivity();
                         activity.drawerLayout.closeDrawers();
                         activity.swipeRefresh.setRefreshing(true);
-                        activity.requestWeather(weatherId);
+                        activity.requestWeather(mId);
                     }
                 }
             }
@@ -221,9 +232,13 @@ public class ChooseAreaFragment extends Fragment {
                                 queryCities();
                             }else if ("county".equals(type)){
                                 queryCounties();
+                                //Toast.makeText(getActivity(),"省市县失败",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+                }else{
+                    closeProgressDialog();
+                    Toast.makeText(getActivity(),"省市县失败",Toast.LENGTH_SHORT).show();
                 }
 
             }
